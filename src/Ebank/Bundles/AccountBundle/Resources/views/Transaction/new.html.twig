@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Transaction creation</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="Create" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('transaction_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/sonatacore/vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#transaction_accountFrom').on('change', function() {
+                var path = "{{ path('get_account_balance', {'accountId': 'accountIdTemp', '_format': 'json'}) }}";
+                path = path.replace('accountIdTemp', $(this).val());
+                $.ajax({
+                    url: path,
+                    dataType: "json",
+                    success: function(data) {
+                        $('#transaction_accountFrom').parent().append(' Balance: ' + data + ' &euro;');
+                        $('#transaction_amount').attr('max', data);
+                    }
+                });
+
+            });
+        })
+    </script>
+{% endblock %}

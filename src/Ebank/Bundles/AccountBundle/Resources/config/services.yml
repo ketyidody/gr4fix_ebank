@@ -1,0 +1,23 @@
+services:
+#    account.example:
+#        class: AccountBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+    account.admin.account:
+        class: Ebank\Bundles\AccountBundle\Admin\AccountAdmin
+        arguments: [~, Ebank\Bundles\AccountBundle\Entity\Account, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Account }
+
+    account.transaction.type:
+        class: Ebank\Bundles\AccountBundle\Form\TransactionType
+        arguments: ["@security.token_storage"]
+        tags:
+            - { name: form.type }
+
+    ebank.account.account_manager:
+        class: Ebank\Bundles\AccountBundle\Service\AccountManager
+        arguments: ['@doctrine.orm.default_entity_manager']
+
+    ebank.account.transaction_manager:
+        class: Ebank\Bundles\AccountBundle\Service\TransactionManager
+        arguments: ['@ebank.account.account_manager']

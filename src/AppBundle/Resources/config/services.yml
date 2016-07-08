@@ -1,0 +1,6 @@
+services:
+    app.handler.user_login_redirect_handler:
+        class: AppBundle\Handler\UserLoginRedirectHandler
+        arguments: ['@router', '@security.authorization_checker']
+        tags:
+              - { name: 'monolog.logger', channel: 'security' }

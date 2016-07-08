@@ -1,0 +1,6 @@
+services:
+    user.admin.user:
+        class: Ebank\Bundles\UserBundle\Admin\UserAdmin
+        arguments: [~, Ebank\Bundles\UserBundle\Entity\User, UserBundle:UserAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: User }
