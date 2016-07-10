@@ -2,6 +2,7 @@
 
 namespace Ebank\Bundles\AccountBundle\Repository;
 
+use Ebank\Bundles\AccountBundle\Entity\Account;
 use Ebank\Bundles\UserBundle\Entity\User;
 
 /**
@@ -31,4 +32,18 @@ class TransactionRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findTransactionForAccount(Account $account)
+    {
+
+        $qb = $this->createQueryBuilder('t');
+        $qb
+            ->join('AccountBundle:Account', 'af', 'WITH', $qb->expr()->eq('t.accountFrom', 'af.id'))
+            ->join('AccountBundle:Account', 'at', 'WITH', $qb->expr()->eq('t.accountTo', 'at.id'))
+            ->where('t.accountFrom = :account')
+            ->orWhere('t.accountTo = :account')
+            ->setParameter('account', $account);
+
+        return $qb->getQuery()->getResult();
+  }
 }

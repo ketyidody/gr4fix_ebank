@@ -2,6 +2,8 @@
 
 namespace Ebank\Bundles\AccountBundle\Repository;
 
+use Ebank\Bundles\UserBundle\Entity\User;
+
 /**
  * AccountRepository
  *
@@ -10,4 +12,16 @@ namespace Ebank\Bundles\AccountBundle\Repository;
  */
 class AccountRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function findAccountsForUser(User $user)
+    {
+
+        $qb = $this->createQueryBuilder('a');
+        $qb
+            ->where('a.owner = :user')
+            ->orWhere(':user MEMBER OF a.disponents')
+            ->setParameter('user', $user);
+
+        return $qb->getQuery()->getResult();
+    }
 }

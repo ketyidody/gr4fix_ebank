@@ -1,6 +1,6 @@
 _index:
     path: /
-    defaults: { _controller: AccountBundle:Transaction:index }
+    defaults: { _controller: AccountBundle:Account:index }
 
 account:
     resource: "@AccountBundle/Controller/"
@@ -15,6 +15,10 @@ user:
     resource: "@UserBundle/Controller/"
     type:     annotation
     prefix:   /
+
+user_rest:
+    type: rest
+    resource: Ebank\Bundles\UserBundle\Controller\Api\Rest\UserController
 
 app:
     resource: "@AppBundle/Controller/"

@@ -2,6 +2,7 @@
 
 namespace Ebank\Bundles\AccountBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,13 +25,14 @@ class Account
     /**
      * @var \stdClass
      *
-     * @ORM\OneToOne(targetEntity="Ebank\Bundles\UserBundle\Entity\User", inversedBy="account")
+     * @ORM\ManyToOne(targetEntity="Ebank\Bundles\UserBundle\Entity\User", inversedBy="accounts")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     protected $owner;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Ebank\Bundles\UserBundle\Entity\User", mappedBy="disponentAccounts")
+     * @ORM\ManyToMany(targetEntity="Ebank\Bundles\UserBundle\Entity\User", inversedBy="disponentAccounts")
+     * @ORM\JoinTable(name="user_disponent_accounts")
      */
     protected $disponents;
 
@@ -40,7 +42,6 @@ class Account
      * @ORM\Column(name="balance", type="integer")
      */
     protected $balance;
-
 
     /**
      * Get id

@@ -18,8 +18,7 @@ class AccountAdmin extends AbstractAdmin
         $datagridMapper
             ->add('id')
             ->add('disponents')
-            ->add('balance')
-        ;
+            ->add('balance');
     }
 
     /**
@@ -38,8 +37,7 @@ class AccountAdmin extends AbstractAdmin
                     'edit' => array(),
                     'delete' => array(),
                 )
-            ))
-        ;
+            ));
     }
 
     /**
@@ -50,8 +48,7 @@ class AccountAdmin extends AbstractAdmin
         $formMapper
             ->add('owner')
             ->add('disponents')
-            ->add('balance', null, ['required' => false, 'data' => 0])
-        ;
+            ->add('balance', null, ['required' => false]);
     }
 
     /**
@@ -59,11 +56,22 @@ class AccountAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
+        $entity = $this->getSubject();
+        $transactions = $this->getConfigurationPool()->getContainer()->get('doctrine')->getRepository('AccountBundle:Transaction')->findTransactionForAccount($entity);
+
         $showMapper
-            ->add('id')
-            ->add('owner')
-            ->add('disponents')
-            ->add('balance')
+            ->with('Account')
+                ->add('id')
+                ->add('owner')
+                ->add('disponents')
+                ->add('balance')
+            ->end()
+            ->with('Transactions')
+                ->add('transactions', 'string', [
+                    'template' => 'transaction/partial/transaction_list.html.twig',
+                    'transactions' => $transactions
+                ])
+            ->end()
         ;
     }
 }

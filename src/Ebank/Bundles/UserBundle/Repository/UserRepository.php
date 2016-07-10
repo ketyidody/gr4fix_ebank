@@ -10,4 +10,20 @@ namespace Ebank\Bundles\UserBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function fullTextSearch($string)
+    {
+
+        $qb = $this->createQueryBuilder('u');
+        $qb
+            ->leftJoin('UserBundle:Address', 'a', 'WITH', $qb->expr()->eq('u.id', 'a.user'))
+            ->where('u.name LIKE :string')
+            ->orWhere('a.street like :string')
+            ->orWhere('a.number like :string')
+            ->orWhere('a.town like :string')
+            ->setParameter('string', "%$string%")
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -7,6 +7,9 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+        <p>Logged in user: {{ app.user }}</p>
+        <p><a href="{{ app.request.headers.get('referer') }}">Back</a></p>
+
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

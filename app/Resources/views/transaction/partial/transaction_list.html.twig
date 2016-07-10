@@ -1,0 +1,63 @@
+{% if field_description.options.transactions is defined %}
+    {% set transactions = field_description.options.transactions %}
+{% endif %}
+
+<table border="1px">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Account From</th>
+        <th>Account To</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for transaction in transactions %}
+        <tr>
+            <td><a href="{{ path('transaction_show', { 'id': transaction.id }) }}">{{ transaction.id }}</a></td>
+            <td>{% if transaction.date %}{{ transaction.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ transaction.amount }} &euro;</td>
+            <td>
+                <ul>
+                    <li>account: {{ transaction.accountFrom }}</li>
+                    <li>owner: {{ transaction.accountFrom.owner }}</li>
+                    <li>
+                        disponents:
+                        <ul>
+                            {% for disponent in transaction.accountFrom.disponents %}
+                                <li>{{ disponent }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li>account: {{ transaction.AccountTo }}</li>
+                    <li>owner: {{ transaction.AccountTo.owner }}</li>
+                    <li>
+                        disponents:
+                        <ul>
+                            {% for disponent in transaction.accountTo.disponents %}
+                                <li>{{ disponent }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('transaction_show', { 'id': transaction.id }) }}">show</a>
+                    </li>
+                    {#<li>#}
+                    {#<a href="{{ path('transaction_edit', { 'id': transaction.id }) }}">edit</a>#}
+                    {#</li>#}
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

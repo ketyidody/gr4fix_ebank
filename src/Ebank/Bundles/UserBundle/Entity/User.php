@@ -45,13 +45,12 @@ class User extends BaseUser
     protected $phone;
 
     /**
-     * @ORM\OneToOne(targetEntity="Ebank\Bundles\AccountBundle\Entity\Account", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="Ebank\Bundles\AccountBundle\Entity\Account", mappedBy="owner")
      */
-    protected $account;
+    protected $accounts;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Ebank\Bundles\AccountBundle\Entity\Account", inversedBy="disponents")
-     * @ORM\JoinTable(name="user_disponent_accounts")
+     * @ORM\ManyToMany(targetEntity="Ebank\Bundles\AccountBundle\Entity\Account", mappedBy="disponents")
      */
     protected $disponentAccounts;
 
@@ -60,7 +59,7 @@ class User extends BaseUser
 
         parent::__construct();
         $this->addresses = new ArrayCollection();
-        $this->disponentAccounts = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
     }
 
     /**
@@ -188,9 +187,9 @@ class User extends BaseUser
      *
      * @return \Ebank\Bundles\AccountBundle\Entity\Account
      */
-    public function getAccount()
+    public function getAccounts()
     {
-        return $this->account;
+        return $this->accounts;
     }
 
     /**
@@ -242,5 +241,29 @@ class User extends BaseUser
         $this->salt = $salt;
 
         return $this;
+    }
+
+    /**
+     * Add account
+     *
+     * @param \Ebank\Bundles\AccountBundle\Entity\Account $account
+     *
+     * @return User
+     */
+    public function addAccount(\Ebank\Bundles\AccountBundle\Entity\Account $account)
+    {
+        $this->accounts[] = $account;
+
+        return $this;
+    }
+
+    /**
+     * Remove account
+     *
+     * @param \Ebank\Bundles\AccountBundle\Entity\Account $account
+     */
+    public function removeAccount(\Ebank\Bundles\AccountBundle\Entity\Account $account)
+    {
+        $this->accounts->removeElement($account);
     }
 }
