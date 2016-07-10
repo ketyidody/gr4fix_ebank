@@ -99,7 +99,7 @@ class UserAdmin extends AbstractAdmin
             ->add('phone')
             ->add('enabled')
             ->add('salt')
-            ->add('password')
+            ->add('plainPassword', 'password')
             ->add('accounts', 'sonata_type_model', [
                 'class' => 'AccountBundle:Account',
                 'multiple' => true
