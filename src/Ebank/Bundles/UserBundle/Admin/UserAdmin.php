@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class UserAdmin extends AbstractAdmin
 {
+
     private static function flattenRoles($rolesHierarchy)
     {
         $flatRoles = array();
@@ -85,6 +86,7 @@ class UserAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+
         $container = $this->getConfigurationPool()->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
 
@@ -98,7 +100,10 @@ class UserAdmin extends AbstractAdmin
             ->add('enabled')
             ->add('salt')
             ->add('password')
-            ->add('account', 'sonata_type_model')
+            ->add('accounts', 'sonata_type_model', [
+                'class' => 'AccountBundle:Account',
+                'multiple' => true
+            ])
             ->add('locked')
             ->add('expiresAt')
             ->add('roles', 'choice', array(
