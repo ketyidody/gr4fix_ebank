@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Account list</h1>
+
+    <table border="1px">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Owner</th>
+            <th>Disponents</th>
+            <th>Balance</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for account in accounts %}
+            <tr>
+                <td><a href="{{ path('account_show', { 'id': account.id }) }}">{{ account.id }}</a></td>
+                <td>{{ account.owner }}</td>
+                <td>
+                    <ul>
+                        {% for disponent in account.disponents %}
+                            <li>{{ disponent }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ account.balance }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('account_show', { 'id': account.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

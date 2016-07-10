@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/jqueryui/themes/base/minified/jquery.ui.core.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/jqueryui/themes/base/minified/jquery.ui.menu.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/jqueryui/themes/base/minified/jquery.ui.dialog.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/vendor/jqueryui/themes/base/minified/jquery.ui.autocomplete.min.css') }}">
+    <style>
+        ul.ui-autocomplete.ui-menu {
+            z-index: 1000;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Account</h1>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ account.id }}</td>
+        </tr>
+        <tr>
+            <th>Balance</th>
+            <td>{{ account.balance }}</td>
+        </tr>
+        <tr>
+            <th>Disponents</th>
+            <td>
+                <ul>
+                    {% for disponent in account.disponents %}
+                        <li>{{ disponent }} <a href="javascript:removeDisponent({{ disponent.id }})">Remote Disponent</a></li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><div class="ui-widget"><input id="autocomplete"></div></td>
+            <td>
+                <a href="javascript:addDisponent({{ account.id }})">Add Disponent</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('account_index') }}">Back to the list</a>
+        </li>
+    </ul>
+
+    {% include ':transaction/partial:transaction_list.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/sonataadmin/vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery.ui.core.min.js') }}"></script>
+    <script src="{{ asset('bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.custom.min.js') }}"></script>
+    <script src="{{ asset('bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery.ui.widget.min.js') }}"></script>
+    <script src="{{ asset('bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery.ui.menu.min.js') }}"></script>
+    <script src="{{ asset('bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery.ui.autocomplete.min.js') }}"></script>
+    <script type="text/javascript">
+        function addDisponent() {
+            var url = "{{ path('add_account_disponent', {'account': account.id, 'user': 'tempDisponentId'}) }}";
+            url = url.replace('tempDisponentId', $('autocomplete').val());
+
+            $.ajax({
+                'url': url,
+                'dataType': 'json',
+                'method': 'PATCH'
+            });
+        }
+
+        function removeDisponent(disponentId) {
+            var url = "{{ path('remove_account_disponent', {'account': account.id, 'user': 'tempDisponentId'}) }}";
+            url = url.replace('tempDisponentId', disponentId);
+
+            $.ajax({
+                'url': url,
+                'dataType': 'json'
+            });
+        }
+
+        $('#autocomplete').autocomplete({
+            source: function (request, response) {
+                var url = "{{ path('name_user_suggestion', {'string': 'tempString'}) }}";
+                url = url.replace('tempString', $('#autocomplete').val());
+                $.ajax({
+                    'url': url,
+                    'dataType': 'json'
+                }, function (data) {
+                    response(data);
+                });
+            }
+        })
+    </script>
+{% endblock %}
